@@ -13,11 +13,13 @@ const io = socketIo(server)
 const PORT = process.env.PORT || 5000
 server.listen(PORT, () => {
     io.on('connection', (socket) => {
+        let roomName;
         socket.on('joinGame', (data) => {
             joinUser(data);
             let userCount = checkUser(data);
             if (userCount <= 2) {
                 socket.join(data.roomId)
+                roomName = data.roomId
                 addRole(data, userCount)
                 let roomUsers = getRoomUsers(data.roomId)
                 io.to(data.roomId).emit('joinGame', roomUsers);
@@ -33,6 +35,10 @@ server.listen(PORT, () => {
             let position = player.position
             io.to(user.room).emit('player', {...user, position})
         })
+        socket.on('eventChange', state => {
+            socket.to(roomName).emit('eventChange', state)
+        })
+
         socket.on('disconnect', () => {
             disconnectUser(socket.id)
         })
