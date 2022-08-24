@@ -82,8 +82,6 @@ function play() {
 
 
 let gamer;
-
-
 function playing() {
     boxes.forEach((item, i) => {
         item.addEventListener('click', () => {
@@ -100,7 +98,12 @@ setTimeout(() => {
         document.getElementById('player2').textContent = users[1].playerName
     })
     socket.on('player', (player) => {
-        box3.getElementsByClassName('toe')[player.position].textContent = player.role
+        ////
+        if(gameMode === '3x3'){
+            box3.getElementsByClassName('toe')[player.position].textContent = player.role;
+        }else{
+            box4.getElementsByClassName('toe')[player.position].textContent = player.role;
+        }
         gamer = player.role;
         console.log(player)
         if (checkToes()) {
