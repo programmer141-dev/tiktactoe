@@ -10,7 +10,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 const io = socketIo(server)
 
-const PORT = 8000 || process.env.PORT
+const PORT = process.env.PORT || 5000
 server.listen(PORT, () => {
     io.on('connection', (socket) => {
         socket.on('joinGame', (data) => {
