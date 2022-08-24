@@ -1,7 +1,7 @@
 let users = [];
 
 function joinUser (player){
-    users.push({id: player.id, playerName: player.playerName, room: player.roomId})
+    users.push({id: player.id, playerName: player.playerName, room: player.roomId, score: 0})
 }
 
 
@@ -65,4 +65,22 @@ function playerData(player){
     return currentUser;
 }
 
-module.exports = { joinUser, playerData, userAppend, checkUser, addRole, disconnectUser, getRoomUsers }
+function scoreInc(player){
+    let score1, score2;
+    users.map(user => {
+        if(player.room === user.room){
+            if(player.id === user.id){
+                user.score += 1
+                score1 = user.score;
+            }
+            else{
+                score2 = user.score;
+            }
+        }
+        
+    })
+    return { player1Score: score1, player2Score :score2}
+}
+
+
+module.exports = { joinUser, playerData, userAppend, checkUser, addRole, disconnectUser, getRoomUsers, scoreInc }

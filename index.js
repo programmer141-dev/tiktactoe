@@ -3,7 +3,7 @@ const app = express()
 const path = require('path')
 const server = require('http').createServer(app)
 const socketIo = require('socket.io')
-const { joinUser, playerData, userAppend, checkUser, addRole, disconnectUser, getRoomUsers } = require('./user')
+const { joinUser, playerData, userAppend, checkUser, addRole, disconnectUser, getRoomUsers, scoreInc } = require('./user')
 
 
 app.use(express.static(path.join(__dirname, 'public')))
@@ -26,7 +26,6 @@ server.listen(PORT, () => {
                 socket.emit('msg', { msg: 'Entered into game', errCode: false })
             } else {
                 let users = userAppend(data);
-                console.log(users)
                 socket.emit('msg', { msg: 'room is already filled', errCode: true })
             }
         })
@@ -37,6 +36,12 @@ server.listen(PORT, () => {
         })
         socket.on('eventChange', state => {
             socket.to(roomName).emit('eventChange', state)
+        })
+        socket.on('score', player => {
+            if(player.id === socket.id){
+                const score = scoreInc(player)
+                io.to(roomName).emit('score', score)
+            }
         })
 
         socket.on('disconnect', () => {

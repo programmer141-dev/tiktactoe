@@ -5,19 +5,19 @@ const box3 = document.getElementsByClassName('outer-box')[0]
 
 
 let boxes;
-
-
-
 let gameMode = '3x3';
 let playername, roomId;
-
+let posibilities;
+let gameEvent = 'click';
+let player1Name, player2Name;
+let player1Score = 0;
+let player2Score = 0;
+let winner;
 
 function setGameMode(mode) {
     gameMode = mode
 }
 
-let posibilities;
-let gameEvent = 'click'
 
 function play() {
         playername = document.getElementById('player-name').value;
@@ -92,8 +92,13 @@ function play() {
     
     socket.on('joinGame', (users) => {
         if(users.length <= 1){gameEvent = 'none'}else{gameEvent = 'block'}
-        document.getElementById('player1').textContent = users[0].playerName
-        document.getElementById('player2').textContent = users[1].playerName
+        setInterval(() => {
+            checkGameOver()
+            player1Name = users[0].playerName;
+            player2Name = users[1].playerName
+            document.getElementById('player1').textContent = `${player1Name} ${player1Score}`
+            document.getElementById('player2').textContent = `${player2Name} ${player2Score}`
+        }, 500)
     })
     socket.on('player', (player) => {
         if (gameMode === '3x3') {
@@ -103,13 +108,39 @@ function play() {
         }
         gamer = player.role;
         if (checkToes()) {
-            let winner = `${player.playerName} won the match`
-            document.getElementsByClassName('winner')[0].textContent = winner
+            socket.emit('score', player);
+            socket.on('score', results => {
+                player1Score = results.player1Score
+                player2Score = results.player2Score
+            })
+            let msg = `${player.playerName} got a point`
+            document.getElementsByClassName('winner')[0].textContent = msg
         }
     })
 socket.on('eventChange', state => gameEvent = state)
 
-
+function checkGameOver(){
+    let count=0;
+    boxes.forEach((item) => {
+        if (item.getElementsByClassName('toe')[0].textContent === ''){
+            count++
+        }
+    })
+    if(count === 0){
+        gameEvent = 'block'
+        let msg;
+        if(player1Score > player2Score){
+            winner = player1Name;
+            msg = `${winner} won the game`
+        }else if(player1Score === player2Score){
+            msg = 'Game tied'
+        }else{
+            winner = player2Name
+            msg = `${winner} won the game`
+        }
+        document.getElementsByClassName('winner')[0].textContent = msg
+    }
+}
 
 
 let gamer;
@@ -131,9 +162,12 @@ function playing() {
 
 function checkToes() {
     const toes = gameMode === '3x3' ? box3.querySelectorAll('.toe') : box4.querySelectorAll('.toe');
-    return posibilities.some((posibility) => {
-        return posibility.every((item) => {
+    return posibilities.some((posibility, i) => {
+        if(posibility.every((item) => {
             return toes[item].textContent === gamer
-        })
+        })){
+            posibilities.splice(i, 1)
+            return true
+        }else false
     })
 }
