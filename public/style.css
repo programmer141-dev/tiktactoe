@@ -12,6 +12,7 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
     background:
             radial-gradient(#0000, #000 80%),
             repeating-conic-gradient(from 45deg,
@@ -42,6 +43,7 @@ body{
     flex-direction: column;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     position: absolute;
+    z-index: 3;
 }
 
 .enterForm .label{
@@ -286,6 +288,20 @@ body{
     width: 100%;
     text-decoration: none;
     font-size: 12px;
+}
+
+.reload{
+    width: 150px;
+    height: 45px;
+    background: linear-gradient(to right, rgb(130, 104, 248), rgb(23, 42, 253));
+    border-radius: 10px;
+    color: white;
+    outline: none;
+    border: none;
+    margin-top: 40px;
+    position: relative;
+    z-index: 2;
+    display: none;
 }
 
 @media only screen and (max-width: 344px) {

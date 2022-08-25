@@ -17,6 +17,16 @@ function setGameMode (mode) {
 
 let posibilities;
 
+function reload(){
+    boxes = gameMode === '4x4' ? box4.querySelectorAll('.box') : box3.querySelectorAll('.box');
+    boxes.forEach((item) => {
+        item.getElementsByClassName('toe')[0].textContent = ""
+    })
+    document.getElementsByClassName('mat')[0].style.display = 'none'
+    document.getElementsByClassName('reload')[0].style.display = 'none'
+    document.getElementsByClassName('winner')[0].textContent = ''
+    playing();
+}
 
 
 function play() {
@@ -77,7 +87,6 @@ function play() {
 
 function playing () {
     boxes.forEach((item) => {
-        console.log(item)
         item.addEventListener('click', () => {
             let toeItem = item.getElementsByClassName('toe')[0];
             if (player === player1) {
@@ -93,6 +102,7 @@ function playing () {
                 let winner = `${pname} won the match`
                 document.getElementsByClassName('winner')[0].textContent = winner
                 document.getElementsByClassName('mat')[0].style.display = 'block'
+                document.getElementsByClassName('reload')[0].style.display = 'block'
             }
         }, { once: true })
     })
@@ -100,7 +110,6 @@ function playing () {
 
 function checkToes () {
     const toes = gameMode === '3x3' ? box3.querySelectorAll('.toe') : box4.querySelectorAll('.toe');
-    console.log(posibilities)
     return posibilities.some((posibility) => {
         return posibility.every((item) => {
             return toes[item].textContent === player
