@@ -31,6 +31,7 @@ function play() {
         boxes = gameMode === '4x4' ? box4.querySelectorAll('.box') : box3.querySelectorAll('.box');
         if (gameMode === '4x4'){
             document.getElementsByClassName('outer-box')[0].style.display = 'none'
+            document.getElementsByClassName('outer-box4')[0].style.display = 'grid'
             posibilities = [
                 [0, 1, 2],
                 [4, 5, 6],

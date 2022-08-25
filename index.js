@@ -7,6 +7,8 @@ const { joinUser, playerData, userAppend, checkUser, addRole, disconnectUser, ge
 
 
 app.use(express.static(path.join(__dirname, 'public')))
+app.get('/online', (req, res) => res.sendFile(path.join(__dirname, 'public/online.html')) )
+app.get('/offline', (req, res) => res.sendFile(path.join(__dirname, 'public/offline.html')))
 
 const io = socketIo(server)
 
