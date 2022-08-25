@@ -10,12 +10,6 @@ let player = player1;
 let gameMode = '3x3';
 let player1Name, player2Name, pname;
 
-function playerEnroll () {
-    player1Name = document.getElementsByClassName('inp')[0].value
-}
-function player2Enroll () {
-    player2Name = document.getElementsByClassName('inp')[1].value
-}
 
 function setGameMode (mode) {
     gameMode = mode
@@ -26,6 +20,8 @@ let posibilities;
 
 
 function play() {
+    player1Name = document.getElementsByClassName('inp')[0].value
+    player2Name = document.getElementsByClassName('inp')[1].value
     if(player1Name != null && player1Name != '' && gameMode != null){
         document.getElementsByClassName('enterForm')[0].style.display = 'none'
         boxes = gameMode === '4x4' ? box4.querySelectorAll('.box') : box3.querySelectorAll('.box');
@@ -96,6 +92,7 @@ function playing () {
             if(checkToes()){
                 let winner = `${pname} won the match`
                 document.getElementsByClassName('winner')[0].textContent = winner
+                document.getElementsByClassName('mat')[0].style.display = 'block'
             }
         }, { once: true })
     })
