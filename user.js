@@ -66,20 +66,20 @@ function playerData(player){
 }
 
 function scoreInc(player){
-    let score1, score2;
+    let player1, player2;
     users.map(user => {
         if(player.room === user.room){
             if(player.id === user.id){
                 user.score += 1
-                score1 = user.score;
+                player1 = user
             }
             else{
-                score2 = user.score;
+                player2 = user
             }
         }
         
     })
-    return { player1Score: score1, player2Score :score2}
+    return { player1: player1, player2: player2 }
 }
 
 

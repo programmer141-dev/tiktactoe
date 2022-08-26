@@ -27,6 +27,7 @@ function play() {
         if(playername != "" && roomId != ""){
             if (gameMode === '4x4') {
                 document.getElementsByClassName('outer-box')[0].style.display = 'none'
+                document.getElementsByClassName('outer-box4')[0].style.display = 'grid'
                 posibilities = [
                     [0, 1, 2],
                     [4, 5, 6],
@@ -91,11 +92,12 @@ function play() {
     }, 0100)
     
     socket.on('joinGame', (users) => {
+        console.log(users)
         if(users.length <= 1){gameEvent = 'none'}else{gameEvent = 'block'}
         setInterval(() => {
             checkGameOver()
-            player1Name = users[0].playerName;
-            player2Name = users[1].playerName
+            player1Name = users[1].playerName;
+            player2Name = users[0].playerName
             document.getElementById('player1').textContent = `${player1Name} ${player1Score}`
             document.getElementById('player2').textContent = `${player2Name} ${player2Score}`
         }, 500)
@@ -110,8 +112,9 @@ function play() {
         if (checkToes()) {
             socket.emit('score', player);
             socket.on('score', results => {
-                player1Score = results.player1Score
-                player2Score = results.player2Score
+                console.log(results)
+                player1Score = results.player1.score
+                player2Score = results.player2.score
             })
             let msg = `${player.playerName} got a point`
             document.getElementsByClassName('winner')[0].textContent = msg
